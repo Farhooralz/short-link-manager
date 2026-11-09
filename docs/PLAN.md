@@ -16,6 +16,10 @@ with something runnable and a commit.
 6. Deleting a link cascades to its clicks.
 7. Chart days use UTC; missing days are filled with 0.
 8. Auth user id type and session API: confirm from Neon Auth docs before writing code.
+9. Neon Auth requires a proxy route handler at /api/auth/[...path]. This is a library
+   requirement, not an app API; all app mutations remain Server Actions.
+10. Cache Components is disabled (the scaffold enabled it). The app reads the session on
+    every request, so it renders dynamically, as the standard Neon Auth setup assumes.
 
 ## Schema
 links:  id (uuid pk), user_id (text, from Neon Auth), slug (text UNIQUE), url (text),

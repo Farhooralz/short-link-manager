@@ -9,7 +9,7 @@ sonner, next-themes, recharts, pnpm only.
 ## Architecture
 - Server Components by default; "use client" only when needed
 - Mutations are Server Actions in src/actions/. No internal API routes.
-  Only exception: the /r/[slug] redirect route handler
+  Only Exceptions: the /r/[slug] redirect route handler and the Neon Auth proxy at /api/auth/[...path]
 - All DB access lives in src/lib/db/. Never in components
 - Actions return { data, error } and never leak raw DB/auth errors
 - All input validated with Zod (schemas in src/lib/validation/)
@@ -22,6 +22,7 @@ sonner, next-themes, recharts, pnpm only.
 - One task per request. Ask before adding dependencies or extra features
 - No dead code, no commented-out code
 - Before saying a task is done, run `pnpm lint` and `pnpm tsc --noEmit`
+- Check next.config.ts before using any Next.js feature from docs (Cache Components is off).
 
 ## Don'ts
 No teams, plans, analytics dashboards, QR codes, Redis, tRPC, GraphQL, Docker.

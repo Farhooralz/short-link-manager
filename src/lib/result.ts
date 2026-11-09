@@ -15,3 +15,6 @@ export function fail(
 ): ActionResult<never> {
   return { data: null, error: { message, fieldErrors } };
 }
+export function ok<T>(data: T): ActionResult<T> {
+  return { data, error: null };
+}

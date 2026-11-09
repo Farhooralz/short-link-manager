@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { ActionResult } from "@/lib/result";
+import { FieldError } from "@/components/field-error";
 
 type AuthFormProps = { mode: "login" | "signup" };
 
@@ -38,11 +39,6 @@ const copy = {
     altHref: "/login",
   },
 } as const;
-
-function FieldError({ messages }: { messages?: string[] }) {
-  if (!messages?.length) return null;
-  return <p className="text-sm text-destructive">{messages[0]}</p>;
-}
 
 export function AuthForm({ mode }: AuthFormProps) {
   const [state, formAction, isPending] = useActionState<

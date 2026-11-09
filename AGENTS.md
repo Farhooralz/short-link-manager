@@ -22,7 +22,6 @@ sonner, next-themes, recharts, pnpm only.
 - One task per request. Ask before adding dependencies or extra features
 - No dead code, no commented-out code
 - Before saying a task is done, run `pnpm lint` and `pnpm tsc --noEmit`
-- Do not commit. Suggest a commit message instead
 
 ## Don'ts
 No teams, plans, analytics dashboards, QR codes, Redis, tRPC, GraphQL, Docker.

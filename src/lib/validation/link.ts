@@ -38,3 +38,4 @@ export const createLinkSchema = z.object({
 });
 
 export type CreateLinkInput = z.infer<typeof createLinkSchema>;
+export const linkIdSchema = z.uuid();

@@ -4,6 +4,8 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { auth } from "@/lib/auth/server";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const { data: session } = await auth.getSession();
   if (session?.user) redirect("/dashboard");

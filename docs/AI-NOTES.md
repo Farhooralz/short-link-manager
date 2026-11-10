@@ -19,3 +19,7 @@
 - Phase 6: the AI used `notFound()` in the route handler based on the Next docs saying it
   "serves a 404". In the browser it was a blank default error page; the docs never promised a
   styled page, and I only found out by opening the URL. Replaced with an explicit HTML 404 response.
+- Phase 8: full-file replacements from the AI silently dropped `export const dynamic = "force-dynamic"`
+  from three pages. Lint, tsc and the browser all looked fine; `pnpm build` printed prerender errors
+  from the auth SDK. Lesson: run `pnpm build` and read `git diff` after any full-file replacement,
+  because dropped lines don't show up as errors.

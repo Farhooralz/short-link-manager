@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { signOutAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth/server";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function DashboardLayout({
             <span className="hidden text-sm text-muted-foreground sm:inline">
               {session.user.email}
             </span>
+            <ThemeToggle />
             <form action={signOutAction}>
               <Button type="submit" variant="outline" size="sm">
                 Log out

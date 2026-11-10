@@ -73,3 +73,12 @@ export async function deleteLink(userId: string, id: string): Promise<boolean> {
 
   return deleted.length > 0;
 }
+export async function getLinkBySlug(slug: string): Promise<Link | null> {
+  const [link] = await db
+    .select()
+    .from(links)
+    .where(eq(links.slug, slug))
+    .limit(1);
+
+  return link ?? null;
+}

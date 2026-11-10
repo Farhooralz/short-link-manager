@@ -17,6 +17,8 @@ function emptyToUndefined<T extends z.ZodType>(schema: T) {
   );
 }
 
+const SLUG_PATTERN = /^[a-zA-Z0-9-]+$/;
+
 export const createLinkSchema = z.object({
   url: z
     .string()
@@ -30,7 +32,7 @@ export const createLinkSchema = z.object({
       .trim()
       .min(3, "Use at least 3 characters")
       .max(50, "Use at most 50 characters")
-      .regex(/^[a-zA-Z0-9-]+$/, "Use letters, numbers and dashes only"),
+      .regex(SLUG_PATTERN, "Use letters, numbers and dashes only"),
   ),
   title: emptyToUndefined(
     z.string().trim().max(100, "Title must be 100 characters or fewer"),
@@ -39,3 +41,4 @@ export const createLinkSchema = z.object({
 
 export type CreateLinkInput = z.infer<typeof createLinkSchema>;
 export const linkIdSchema = z.uuid();
+export const slugParamSchema = z.string().max(50).regex(SLUG_PATTERN);

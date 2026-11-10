@@ -20,6 +20,9 @@ with something runnable and a commit.
    requirement, not an app API; all app mutations remain Server Actions.
 10. Cache Components is disabled (the scaffold enabled it). The app reads the session on
     every request, so it renders dynamically, as the standard Neon Auth setup assumes.
+11. Unknown slugs at /r/[slug] return a small inline HTML 404 from the route handler, because
+    notFound() in a route handler sends a 404 with no body (the browser shows its own error
+    page). Pages elsewhere use app/not-found.tsx.
 
 ## Schema
 links:  id (uuid pk), user_id (text, from Neon Auth), slug (text UNIQUE), url (text),

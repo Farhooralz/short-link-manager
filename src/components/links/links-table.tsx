@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CopyButton } from "@/components/links/copy-button";
 import { DeleteLinkDialog } from "@/components/links/delete-link-dialog";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,7 +31,14 @@ export function LinksTable({ links }: { links: LinkWithClicks[] }) {
           <TableBody>
             {links.map((link) => (
               <TableRow key={link.id}>
-                <TableCell className="font-mono">/r/{link.slug}</TableCell>
+                <TableCell className="font-mono">
+                  <Link
+                    href={`/dashboard/links/${link.id}`}
+                    className="underline-offset-4 hover:underline"
+                  >
+                    /r/{link.slug}
+                  </Link>
+                </TableCell>
                 <TableCell>{link.title ?? "—"}</TableCell>
                 <TableCell className="max-w-xs truncate" title={link.url}>
                   {link.url}
@@ -55,7 +63,12 @@ export function LinksTable({ links }: { links: LinkWithClicks[] }) {
             <Card>
               <CardContent className="flex flex-col gap-3">
                 <div>
-                  <p className="font-mono font-medium">/r/{link.slug}</p>
+                  <Link
+                    href={`/dashboard/links/${link.id}`}
+                    className="font-mono font-medium underline-offset-4 hover:underline"
+                  >
+                    /r/{link.slug}
+                  </Link>
                   {link.title && (
                     <p className="text-sm text-muted-foreground">{link.title}</p>
                   )}

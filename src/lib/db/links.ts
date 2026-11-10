@@ -82,3 +82,18 @@ export async function getLinkBySlug(slug: string): Promise<Link | null> {
 
   return link ?? null;
 }
+/** Returns null when the link doesn’t exist or belongs to someone else. */
+export async function getLinkDetail(
+  userId: string,
+  id: string,
+): Promise<LinkWithClicks | null> {
+  const [row] = await db
+    .select({ link: links, clickCount: count(clicks.id) })
+    .from(links)
+    .leftJoin(clicks, eq(clicks.linkId, links.id))
+    .where(and(eq(links.id, id), eq(links.userId, userId)))
+    .groupBy(links.id)
+    .limit(1);
+
+  return row ? { ...row.link, clickCount: row.clickCount } : null;
+}

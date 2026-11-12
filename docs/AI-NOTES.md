@@ -23,3 +23,19 @@
   from three pages. Lint, tsc and the browser all looked fine; `pnpm build` printed prerender errors
   from the auth SDK. Lesson: run `pnpm build` and read `git diff` after any full-file replacement,
   because dropped lines don't show up as errors.
+
+## v2
+
+- Phase 1: the AI used next-intl's `redirect()`, which isn't typed `never`, so TypeScript lost the
+  `session` null-narrowing in five places. Lint passed; only `tsc` caught it. I also had stale
+  generated types in `.next/dev` from before the folder move; deleting `.next` fixed those.
+  Fix: a small `redirectTo` helper built on Next's own `redirect`.
+- Phase 1: the AI removed `auth.middleware` from `proxy.ts` to simplify i18n routing. Neon's docs
+  say that middleware refreshes the 5-minute session cache cookie, and Server Components can't
+  write cookies, so `getSession()` threw on a stale cookie. My quick manual tests all passed
+  because the cookie was fresh. Lesson: time-dependent behavior needs a time-based test (I
+  shortened `sessionDataTtl` to 10s to reproduce it, then reverted). Fix: dashboard routes use
+  Neon's guard again, composed with next-intl in `proxy.ts`, and the public pages no longer read
+  the session.
+- Phase 1: the same stale-cookie bug probably exists in v1 (`main`), where public pages also
+  called `getSession()` without the middleware covering them.

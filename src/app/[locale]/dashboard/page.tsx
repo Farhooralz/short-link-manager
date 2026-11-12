@@ -1,4 +1,5 @@
-import { redirect } from "next/navigation";
+import { getLocale } from "next-intl/server";
+import { redirectTo } from "@/i18n/redirect-to";
 import { CreateLinkForm } from "@/components/links/create-link-form";
 import { EmptyState } from "@/components/links/empty-state";
 import { LinksTable } from "@/components/links/links-table";
@@ -7,7 +8,7 @@ import { getLinksByUser } from "@/lib/db/links";
 
 export default async function DashboardPage() {
   const { data: session } = await auth.getSession();
-  if (!session?.user) redirect("/login");
+  if (!session?.user) redirectTo("/login", await getLocale());
 
   const links = await getLinksByUser(session.user.id);
 

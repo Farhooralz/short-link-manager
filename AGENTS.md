@@ -23,6 +23,8 @@ sonner, next-themes, recharts, pnpm only.
 - No dead code, no commented-out code
 - Before saying a task is done, run `pnpm lint` and `pnpm tsc --noEmit`
 - Check next.config.ts before using any Next.js feature from docs (Cache Components is off).
+- App routes: use `Link` from @/i18n/navigation and `redirectTo` from @/i18n/redirect-to, never
+  `next/link` or next-intl's `redirect`. Public pages must not call auth.getSession().
 
 ## Don'ts
 No teams, plans, analytics dashboards, QR codes, Redis, tRPC, GraphQL, Docker.

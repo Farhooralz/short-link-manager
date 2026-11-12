@@ -1,5 +1,7 @@
-import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { getLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { Link } from "@/i18n/navigation";
+import { redirectTo } from "@/i18n/redirect-to";
 import { ClicksChart } from "@/components/charts/clicks-chart";
 import { CopyButton } from "@/components/links/copy-button";
 import { buttonVariants } from "@/components/ui/button";
@@ -23,7 +25,7 @@ export default async function LinkDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { data: session } = await auth.getSession();
-  if (!session?.user) redirect("/login");
+  if (!session?.user) redirectTo("/login", await getLocale());
 
   const parsedId = linkIdSchema.safeParse((await params).id);
   if (!parsedId.success) notFound();

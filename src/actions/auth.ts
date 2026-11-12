@@ -1,6 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { getLocale } from "next-intl/server";
+import { redirectTo } from "@/i18n/redirect-to";
 import { z } from "zod";
 import { auth } from "@/lib/auth/server";
 import { fail, type ActionResult } from "@/lib/result";
@@ -26,7 +27,7 @@ export async function signUpAction(
     );
   }
 
-  redirect("/dashboard");
+  redirectTo("/dashboard", await getLocale());
 }
 
 export async function signInAction(
@@ -47,10 +48,10 @@ export async function signInAction(
     return fail("Invalid email or password.");
   }
 
-  redirect("/dashboard");
+  redirectTo("/dashboard", await getLocale());
 }
 
 export async function signOutAction(): Promise<void> {
   await auth.signOut();
-  redirect("/login");
+  redirectTo("/login", await getLocale());
 }

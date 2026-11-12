@@ -23,6 +23,14 @@ with something runnable and a commit.
 11. Unknown slugs at /r/[slug] return a small inline HTML 404 from the route handler, because
     notFound() in a route handler sends a 404 with no body (the browser shows its own error
     page). Pages elsewhere use app/not-found.tsx.
+12. v2 uses next-intl with prefix-always locale routing (/en/..., later /fa/...). proxy.ts sends
+    locale-prefixed /dashboard routes to Neon's guard (session refresh + login redirect) and
+    everything else to next-intl. /api/* and /r/* are excluded from locale routing.
+13. Home, login and signup don't read the session. Server Components can't refresh Neon's
+    5-minute session cache cookie, so getSession() there throws on a stale cookie. Trade-off: a
+    logged-in visitor on /login sees the form. To be revisited with the landing page.
+14. App routes use `Link` from @/i18n/navigation and `redirectTo` from @/i18n/redirect-to.
+    next-intl's own redirect() isn't typed `never`, which broke session null-narrowing.
 
 ## Schema
 links:  id (uuid pk), user_id (text, from Neon Auth), slug (text UNIQUE), url (text),
@@ -78,3 +86,25 @@ drizzle.config.ts
 - Feature tested by hand in the browser
 - No secrets committed; .env.example updated
 - One line added to docs/AI-NOTES.md (what the AI got wrong or did well)
+
+## v2 (branch feat/v2; v1 is tagged v1-submission)
+
+Rules: all DB migrations are additive (new nullable columns/tables only), because main shares
+the same Neon database. One commit per phase. Every new feature ships in EN and FA.
+
+Structure changes: pages live under src/app/[locale]/; src/i18n/ (routing, request, navigation,
+redirect-to); messages/ (one JSON file per locale).
+
+### Phases
+- [x] 1. i18n routing (next-intl, pages under [locale], locale-aware links and redirects)
+- [ ] 2. i18n messages (typed keys, translated action errors and Zod messages)
+- [ ] 3. Farsi + RTL (fa.json, Vazirmatn, logical classes, switcher, Jalali dates)
+- [ ] 4. Design system + app shell (tokens, sidebar, motion)
+- [ ] 5. Dashboard overview (stats, trend, top links, 30-day chart)
+- [ ] 6. Richer analytics (device, browser, country, referrer; additive migration)
+- [ ] 7. QR codes (PNG/SVG download)
+- [ ] 8. Link controls (expiry, click limit, on/off; additive migration)
+- [ ] 9. Search, sort, filter + CSV export
+- [ ] 10. Command palette (⌘K)
+- [ ] 11. Landing page (bilingual, SEO, hreflang, OG image)
+- [ ] 12. Hardening (audit, README update, preview deploy, merge decision)

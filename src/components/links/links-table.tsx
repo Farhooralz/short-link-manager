@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { CopyButton } from "@/components/links/copy-button";
 import { DeleteLinkDialog } from "@/components/links/delete-link-dialog";
 import { Card, CardContent } from "@/components/ui/card";

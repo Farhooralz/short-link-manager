@@ -1,15 +1,8 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
-import { auth } from "@/lib/auth/server";
+import { Link } from "@/i18n/navigation";
 
-export const dynamic = "force-dynamic";
-
-export default async function HomePage() {
-  const { data: session } = await auth.getSession();
-  if (session?.user) redirect("/dashboard");
-
+export default function HomePage() {
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center gap-6 p-4 text-center">
       <ThemeToggle className="absolute right-4 top-4" />

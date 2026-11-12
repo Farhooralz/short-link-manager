@@ -1,4 +1,5 @@
-import { redirect } from "next/navigation";
+import { getLocale } from "next-intl/server";
+import { redirectTo } from "@/i18n/redirect-to";
 import { signOutAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth/server";
@@ -12,7 +13,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { data: session } = await auth.getSession();
-  if (!session?.user) redirect("/login");
+  if (!session?.user) redirectTo("/login", await getLocale());
 
   return (
     <div className="min-h-screen">

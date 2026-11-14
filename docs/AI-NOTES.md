@@ -39,3 +39,4 @@
   the session.
 - Phase 1: the same stale-cookie bug probably exists in v1 (`main`), where public pages also
   called `getSession()` without the middleware covering them.
+- Phase 2: [add anything that tripped you up here. If nothing did, skip this line.]

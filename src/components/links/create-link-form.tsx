@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition, type FormEvent } from "react";
 import { toast } from "sonner";
 import { createLinkAction } from "@/actions/links";
@@ -18,6 +19,8 @@ import { Label } from "@/components/ui/label";
 import type { FieldErrors } from "@/lib/result";
 
 export function CreateLinkForm() {
+  const t = useTranslations("CreateLink");
+  const tErrors = useTranslations("Errors");
   const [isPending, startTransition] = useTransition();
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
@@ -30,54 +33,55 @@ export function CreateLinkForm() {
       const result = await createLinkAction(formData);
 
       if (result.error) {
-        setFieldErrors(result.error.fieldErrors ?? {});
-        if (!result.error.fieldErrors) toast.error(result.error.message);
+        const errors = result.error.fieldErrors ?? {};
+        setFieldErrors(errors);
+        if (Object.keys(errors).length === 0) {
+          toast.error(tErrors(result.error.code));
+        }
         return;
       }
 
       setFieldErrors({});
       form.reset();
-      toast.success(`Short link created: /r/${result.data.slug}`);
+      toast.success(t("created", { slug: result.data.slug }));
     });
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create a short link</CardTitle>
-        <CardDescription>
-          Paste a long URL. Leave the slug empty to get a random one.
-        </CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit} noValidate>
         <CardContent className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="url">Long URL</Label>
+            <Label htmlFor="url">{t("url")}</Label>
             <Input
               id="url"
               name="url"
               type="url"
-              placeholder="https://example.com/a/very/long/url"
+              placeholder={t("urlPlaceholder")}
               required
             />
-            <FieldError messages={fieldErrors.url} />
+            <FieldError codes={fieldErrors.url} />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
-              <Label htmlFor="slug">Custom slug (optional)</Label>
-              <Input id="slug" name="slug" placeholder="my-link" />
-              <FieldError messages={fieldErrors.slug} />
+              <Label htmlFor="slug">{t("slug")}</Label>
+              <Input id="slug" name="slug" placeholder={t("slugPlaceholder")} />
+              <FieldError codes={fieldErrors.slug} />
             </div>
             <div className="flex flex-col gap-2">
-              <Label htmlFor="title">Title (optional)</Label>
-              <Input id="title" name="title" placeholder="My article" />
-              <FieldError messages={fieldErrors.title} />
+              <Label htmlFor="title">{t("linkTitle")}</Label>
+              <Input id="title" name="title" placeholder={t("titlePlaceholder")} />
+              <FieldError codes={fieldErrors.title} />
             </div>
           </div>
         </CardContent>
         <CardFooter className="mt-6">
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Creating…" : "Create link"}
+            {isPending ? t("pending") : t("submit")}
           </Button>
         </CardFooter>
       </form>

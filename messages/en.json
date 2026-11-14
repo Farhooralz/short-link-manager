@@ -1,1 +1,130 @@
-{}
+{
+  "Metadata": {
+    "title": "Short Link Manager",
+    "description": "Create short links and track their clicks."
+  },
+  "Common": {
+    "appName": "Short Link Manager"
+  },
+  "Theme": {
+    "toggle": "Toggle dark mode",
+    "dark": "Dark",
+    "light": "Light"
+  },
+  "Home": {
+    "tagline": "Create short links, share them anywhere, and see how many people click.",
+    "signUp": "Sign up",
+    "logIn": "Log in"
+  },
+  "Auth": {
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "login": {
+      "title": "Welcome back",
+      "description": "Log in to manage your links.",
+      "submit": "Log in",
+      "pending": "Logging in…",
+      "altText": "Don’t have an account?",
+      "altLabel": "Sign up"
+    },
+    "signup": {
+      "title": "Create your account",
+      "description": "Start creating short links in seconds.",
+      "submit": "Create account",
+      "pending": "Creating account…",
+      "altText": "Already have an account?",
+      "altLabel": "Log in"
+    }
+  },
+  "Dashboard": {
+    "title": "Your links",
+    "logOut": "Log out"
+  },
+  "CreateLink": {
+    "title": "Create a short link",
+    "description": "Paste a long URL. Leave the slug empty to get a random one.",
+    "url": "Long URL",
+    "urlPlaceholder": "https://example.com/a/very/long/url",
+    "slug": "Custom slug (optional)",
+    "slugPlaceholder": "my-link",
+    "linkTitle": "Title (optional)",
+    "titlePlaceholder": "My article",
+    "submit": "Create link",
+    "pending": "Creating…",
+    "created": "Short link created: /r/{slug}"
+  },
+  "Links": {
+    "slug": "Slug",
+    "title": "Title",
+    "destination": "Destination",
+    "clicks": "Clicks",
+    "created": "Created",
+    "actions": "Actions",
+    "noTitle": "—",
+    "clickCount": "{count, plural, one {# click} other {# clicks}}",
+    "copy": "Copy",
+    "copied": "Short link copied",
+    "copyFailed": "Couldn’t copy the link. Please copy it manually."
+  },
+  "DeleteLink": {
+    "delete": "Delete",
+    "title": "Delete /r/{slug}?",
+    "description": "This permanently deletes the link and its click history. Anyone using the short URL will get a 404.",
+    "cancel": "Cancel",
+    "confirm": "Delete link",
+    "pending": "Deleting…",
+    "deleted": "Link deleted"
+  },
+  "Empty": {
+    "title": "No links yet",
+    "description": "Create your first short link with the form above."
+  },
+  "LinkDetail": {
+    "back": "← Back to links",
+    "destination": "Destination",
+    "totalClicks": "Total clicks",
+    "created": "Created",
+    "chartTitle": "Clicks per day",
+    "chartDescription": "Last 7 days (UTC)",
+    "noRecentClicks": "No clicks in the last 7 days yet.",
+    "series": "Clicks"
+  },
+  "RouteError": {
+    "title": "Something went wrong",
+    "description": "We couldn’t load this page. Please try again.",
+    "retry": "Try again"
+  },
+  "NotFound": {
+    "code": "404",
+    "title": "Page not found",
+    "description": "This link doesn’t exist, or it may have been deleted.",
+    "home": "Go home"
+  },
+  "Errors": {
+    "unauthorized": "You need to be logged in.",
+    "invalidInput": "Please fix the highlighted fields.",
+    "signUpFailed": "We couldn’t create your account. That email may already be registered.",
+    "signInFailed": "Invalid email or password.",
+    "createFailed": "Something went wrong creating your link. Please try again.",
+    "deleteFailed": "Something went wrong deleting your link. Please try again.",
+    "linkNotFound": "That link doesn’t exist or was already deleted."
+  },
+  "Validation": {
+    "nameRequired": "Name is required",
+    "nameTooLong": "Name is too long",
+    "emailInvalid": "Enter a valid email address",
+    "passwordTooShort": "Use at least 8 characters",
+    "passwordTooLong": "Password is too long",
+    "passwordRequired": "Password is required",
+    "urlRequired": "Enter a URL",
+    "urlTooLong": "URL is too long",
+    "urlInvalid": "Enter a valid http:// or https:// URL",
+    "slugTooShort": "Use at least 3 characters",
+    "slugTooLong": "Use at most 50 characters",
+    "slugInvalid": "Use letters, numbers and dashes only",
+    "slugTaken": "That slug is already taken",
+    "titleTooLong": "Title must be 100 characters or fewer",
+    "invalid": "This value is invalid"
+  }
+}

@@ -1,4 +1,4 @@
-import { Link } from "@/i18n/navigation";
+import { useFormatter, useTranslations } from "next-intl";
 import { CopyButton } from "@/components/links/copy-button";
 import { DeleteLinkDialog } from "@/components/links/delete-link-dialog";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,22 +10,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Link } from "@/i18n/navigation";
 import type { LinkWithClicks } from "@/lib/db/links";
-import { formatDate } from "@/lib/format";
 
 export function LinksTable({ links }: { links: LinkWithClicks[] }) {
+  const t = useTranslations("Links");
+  const format = useFormatter();
+
+  const formatDate = (date: Date) =>
+    format.dateTime(date, { dateStyle: "medium", timeZone: "UTC" });
+
   return (
     <>
       <div className="hidden rounded-lg border md:block">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Slug</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Destination</TableHead>
-              <TableHead className="text-right">Clicks</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{t("slug")}</TableHead>
+              <TableHead>{t("title")}</TableHead>
+              <TableHead>{t("destination")}</TableHead>
+              <TableHead className="text-right">{t("clicks")}</TableHead>
+              <TableHead>{t("created")}</TableHead>
+              <TableHead className="text-right">{t("actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -39,7 +45,7 @@ export function LinksTable({ links }: { links: LinkWithClicks[] }) {
                     /r/{link.slug}
                   </Link>
                 </TableCell>
-                <TableCell>{link.title ?? "—"}</TableCell>
+                <TableCell>{link.title ?? t("noTitle")}</TableCell>
                 <TableCell className="max-w-xs truncate" title={link.url}>
                   {link.url}
                 </TableCell>
@@ -75,8 +81,8 @@ export function LinksTable({ links }: { links: LinkWithClicks[] }) {
                 </div>
                 <p className="break-all text-sm">{link.url}</p>
                 <p className="text-sm text-muted-foreground">
-                  {link.clickCount} {link.clickCount === 1 ? "click" : "clicks"}{" "}
-                  · {formatDate(link.createdAt)}
+                  {t("clickCount", { count: link.clickCount })} ·{" "}
+                  {formatDate(link.createdAt)}
                 </p>
                 <div className="flex gap-2">
                   <CopyButton slug={link.slug} />

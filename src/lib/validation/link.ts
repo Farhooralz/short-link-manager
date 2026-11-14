@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const SLUG_PATTERN = /^[a-zA-Z0-9-]+$/;
+
 function isHttpUrl(value: string): boolean {
   try {
     const { protocol } = new URL(value);
@@ -17,28 +19,26 @@ function emptyToUndefined<T extends z.ZodType>(schema: T) {
   );
 }
 
-const SLUG_PATTERN = /^[a-zA-Z0-9-]+$/;
-
 export const createLinkSchema = z.object({
   url: z
     .string()
     .trim()
-    .min(1, "Enter a URL")
-    .max(2048, "URL is too long")
-    .refine(isHttpUrl, "Enter a valid http:// or https:// URL"),
+    .min(1, "urlRequired")
+    .max(2048, "urlTooLong")
+    .refine(isHttpUrl, "urlInvalid"),
   slug: emptyToUndefined(
     z
       .string()
       .trim()
-      .min(3, "Use at least 3 characters")
-      .max(50, "Use at most 50 characters")
-      .regex(SLUG_PATTERN, "Use letters, numbers and dashes only"),
+      .min(3, "slugTooShort")
+      .max(50, "slugTooLong")
+      .regex(SLUG_PATTERN, "slugInvalid"),
   ),
-  title: emptyToUndefined(
-    z.string().trim().max(100, "Title must be 100 characters or fewer"),
-  ),
+  title: emptyToUndefined(z.string().trim().max(100, "titleTooLong")),
 });
 
 export type CreateLinkInput = z.infer<typeof createLinkSchema>;
+
 export const linkIdSchema = z.uuid();
+
 export const slugParamSchema = z.string().max(50).regex(SLUG_PATTERN);

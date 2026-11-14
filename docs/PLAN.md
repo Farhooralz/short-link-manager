@@ -31,6 +31,12 @@ with something runnable and a commit.
     logged-in visitor on /login sees the form. To be revisited with the landing page.
 14. App routes use `Link` from @/i18n/navigation and `redirectTo` from @/i18n/redirect-to.
     next-intl's own redirect() isn't typed `never`, which broke session null-narrowing.
+15. Server actions return error codes (src/lib/error-codes.ts), and Zod messages are codes too.
+    The client translates them with typed message keys, so the server never needs the locale
+    to produce text.
+16. The locale is passed explicitly: pages read it from params and call setRequestLocale();
+    auth actions receive it as a bound argument and validate it with resolveLocale().
+    Dates are formatted through next-intl.
 
 ## Schema
 links:  id (uuid pk), user_id (text, from Neon Auth), slug (text UNIQUE), url (text),
@@ -97,7 +103,7 @@ redirect-to); messages/ (one JSON file per locale).
 
 ### Phases
 - [x] 1. i18n routing (next-intl, pages under [locale], locale-aware links and redirects)
-- [ ] 2. i18n messages (typed keys, translated action errors and Zod messages)
+- [x] 2. i18n messages (typed keys, translated action errors and Zod messages)
 - [ ] 3. Farsi + RTL (fa.json, Vazirmatn, logical classes, switcher, Jalali dates)
 - [ ] 4. Design system + app shell (tokens, sidebar, motion)
 - [ ] 5. Dashboard overview (stats, trend, top links, 30-day chart)

@@ -1,7 +1,9 @@
-import { getLocale } from "next-intl/server";
+import {
+  getFormatter,
+  getTranslations,
+  setRequestLocale,
+} from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Link } from "@/i18n/navigation";
-import { redirectTo } from "@/i18n/redirect-to";
 import { ClicksChart } from "@/components/charts/clicks-chart";
 import { CopyButton } from "@/components/links/copy-button";
 import { buttonVariants } from "@/components/ui/button";
@@ -12,28 +14,38 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { resolveLocale } from "@/i18n/locale";
+import { Link } from "@/i18n/navigation";
+import { redirectTo } from "@/i18n/redirect-to";
 import { auth } from "@/lib/auth/server";
 import { getClicksPerDay } from "@/lib/db/clicks";
 import { getLinkDetail } from "@/lib/db/links";
-import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { linkIdSchema } from "@/lib/validation/link";
 
 export default async function LinkDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ locale: string; id: string }>;
 }) {
-  const { data: session } = await auth.getSession();
-  if (!session?.user) redirectTo("/login", await getLocale());
+  const { locale: rawLocale, id } = await params;
+  const locale = resolveLocale(rawLocale);
+  setRequestLocale(locale);
 
-  const parsedId = linkIdSchema.safeParse((await params).id);
+  const { data: session } = await auth.getSession();
+  if (!session?.user) redirectTo("/login", locale);
+
+  const parsedId = linkIdSchema.safeParse(id);
   if (!parsedId.success) notFound();
 
   const link = await getLinkDetail(session.user.id, parsedId.data);
   if (!link) notFound();
 
-  const daily = await getClicksPerDay(link.id, 7);
+  const [t, format, daily] = await Promise.all([
+    getTranslations("LinkDetail"),
+    getFormatter(),
+    getClicksPerDay(link.id, 7),
+  ]);
   const hasRecentClicks = daily.some((point) => point.clicks > 0);
 
   return (
@@ -42,7 +54,7 @@ export default async function LinkDetailPage({
         href="/dashboard"
         className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "self-start")}
       >
-        ← Back to links
+        {t("back")}
       </Link>
 
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -57,7 +69,7 @@ export default async function LinkDetailPage({
 
       <Card>
         <CardHeader>
-          <CardDescription>Destination</CardDescription>
+          <CardDescription>{t("destination")}</CardDescription>
           <CardTitle className="break-all text-base font-normal">
             <a
               href={link.url}
@@ -74,29 +86,32 @@ export default async function LinkDetailPage({
       <div className="grid gap-4 sm:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardDescription>Total clicks</CardDescription>
+            <CardDescription>{t("totalClicks")}</CardDescription>
             <CardTitle className="text-3xl">{link.clickCount}</CardTitle>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader>
-            <CardDescription>Created</CardDescription>
-            <CardTitle className="text-3xl">{formatDate(link.createdAt)}</CardTitle>
+            <CardDescription>{t("created")}</CardDescription>
+            <CardTitle className="text-3xl">
+              {format.dateTime(link.createdAt, {
+                dateStyle: "medium",
+                timeZone: "UTC",
+              })}
+            </CardTitle>
           </CardHeader>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Clicks per day</CardTitle>
-          <CardDescription>Last 7 days (UTC)</CardDescription>
+          <CardTitle>{t("chartTitle")}</CardTitle>
+          <CardDescription>{t("chartDescription")}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           <ClicksChart data={daily} />
           {!hasRecentClicks && (
-            <p className="text-sm text-muted-foreground">
-              No clicks in the last 7 days yet.
-            </p>
+            <p className="text-sm text-muted-foreground">{t("noRecentClicks")}</p>
           )}
         </CardContent>
       </Card>

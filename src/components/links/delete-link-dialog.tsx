@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteLinkAction } from "@/actions/links";
@@ -17,6 +18,8 @@ import { Button } from "@/components/ui/button";
 type DeleteLinkDialogProps = { id: string; slug: string };
 
 export function DeleteLinkDialog({ id, slug }: DeleteLinkDialogProps) {
+  const t = useTranslations("DeleteLink");
+  const tErrors = useTranslations("Errors");
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -24,10 +27,10 @@ export function DeleteLinkDialog({ id, slug }: DeleteLinkDialogProps) {
     startTransition(async () => {
       const result = await deleteLinkAction(id);
       if (result.error) {
-        toast.error(result.error.message);
+        toast.error(tErrors(result.error.code));
         return;
       }
-      toast.success("Link deleted");
+      toast.success(t("deleted"));
       setOpen(false);
     });
   }
@@ -40,26 +43,23 @@ export function DeleteLinkDialog({ id, slug }: DeleteLinkDialogProps) {
         size="sm"
         onClick={() => setOpen(true)}
       >
-        Delete
+        {t("delete")}
       </Button>
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete /r/{slug}?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This permanently deletes the link and its click history. Anyone
-              using the short URL will get a 404.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{t("title", { slug })}</AlertDialogTitle>
+            <AlertDialogDescription>{t("description")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>{t("cancel")}</AlertDialogCancel>
             <Button
               type="button"
               variant="destructive"
               onClick={handleDelete}
               disabled={isPending}
             >
-              {isPending ? "Deleting…" : "Delete link"}
+              {isPending ? t("pending") : t("confirm")}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

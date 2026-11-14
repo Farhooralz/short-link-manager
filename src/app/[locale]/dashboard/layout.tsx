@@ -1,33 +1,42 @@
-import { getLocale } from "next-intl/server";
-import { redirectTo } from "@/i18n/redirect-to";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { signOutAction } from "@/actions/auth";
-import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/auth/server";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import { resolveLocale } from "@/i18n/locale";
+import { redirectTo } from "@/i18n/redirect-to";
+import { auth } from "@/lib/auth/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  const locale = resolveLocale((await params).locale);
+  setRequestLocale(locale);
+
   const { data: session } = await auth.getSession();
-  if (!session?.user) redirectTo("/login", await getLocale());
+  if (!session?.user) redirectTo("/login", locale);
+
+  const t = await getTranslations("Dashboard");
+  const tCommon = await getTranslations("Common");
 
   return (
     <div className="min-h-screen">
       <header className="border-b">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-          <span className="font-semibold">Short Link Manager</span>
+          <span className="font-semibold">{tCommon("appName")}</span>
           <div className="flex items-center gap-3">
             <span className="hidden text-sm text-muted-foreground sm:inline">
               {session.user.email}
             </span>
             <ThemeToggle />
-            <form action={signOutAction}>
+            <form action={signOutAction.bind(null, locale)}>
               <Button type="submit" variant="outline" size="sm">
-                Log out
+                {t("logOut")}
               </Button>
             </form>
           </div>

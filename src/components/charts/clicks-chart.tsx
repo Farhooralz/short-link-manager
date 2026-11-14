@@ -1,5 +1,6 @@
 "use client";
 
+import { useFormatter, useTranslations } from "next-intl";
 import {
   Bar,
   BarChart,
@@ -11,17 +12,18 @@ import {
 } from "recharts";
 import type { DailyClicks } from "@/lib/db/clicks";
 
-const labelFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  timeZone: "UTC",
-});
-
 const tickStyle = { fill: "var(--muted-foreground)", fontSize: 12 };
 
 export function ClicksChart({ data }: { data: DailyClicks[] }) {
+  const t = useTranslations("LinkDetail");
+  const format = useFormatter();
+
   const chartData = data.map((point) => ({
-    label: labelFormatter.format(new Date(`${point.date}T00:00:00Z`)),
+    label: format.dateTime(new Date(`${point.date}T00:00:00Z`), {
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC",
+    }),
     clicks: point.clicks,
   }));
 
@@ -57,7 +59,7 @@ export function ClicksChart({ data }: { data: DailyClicks[] }) {
           />
           <Bar
             dataKey="clicks"
-            name="Clicks"
+            name={t("series")}
             fill="var(--primary)"
             radius={[4, 4, 0, 0]}
           />

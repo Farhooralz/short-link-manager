@@ -1,8 +1,9 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { signInAction, signUpAction } from "@/actions/auth";
+import { FieldError } from "@/components/field-error";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,59 +15,48 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Link } from "@/i18n/navigation";
 import type { ActionResult } from "@/lib/result";
-import { FieldError } from "@/components/field-error";
 
 type AuthFormProps = { mode: "login" | "signup" };
 
-const copy = {
-  login: {
-    title: "Welcome back",
-    description: "Log in to manage your links.",
-    submit: "Log in",
-    pending: "Logging in…",
-    altText: "Don’t have an account?",
-    altLabel: "Sign up",
-    altHref: "/signup",
-  },
-  signup: {
-    title: "Create your account",
-    description: "Start creating short links in seconds.",
-    submit: "Create account",
-    pending: "Creating account…",
-    altText: "Already have an account?",
-    altLabel: "Log in",
-    altHref: "/login",
-  },
-} as const;
-
 export function AuthForm({ mode }: AuthFormProps) {
+  const t = useTranslations("Auth");
+  const tErrors = useTranslations("Errors");
+  const locale = useLocale();
+
   const [state, formAction, isPending] = useActionState<
     ActionResult<null> | null,
     FormData
-  >(mode === "signup" ? signUpAction : signInAction, null);
+  >(
+    mode === "signup"
+      ? signUpAction.bind(null, locale)
+      : signInAction.bind(null, locale),
+    null,
+  );
 
-  const text = copy[mode];
   const fieldErrors = state?.error?.fieldErrors;
-  const formError = state?.error && !fieldErrors ? state.error.message : null;
+  const hasFieldErrors =
+    fieldErrors !== undefined && Object.keys(fieldErrors).length > 0;
+  const formErrorCode = state?.error && !hasFieldErrors ? state.error.code : null;
 
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>{text.title}</CardTitle>
-        <CardDescription>{text.description}</CardDescription>
+        <CardTitle>{t(`${mode}.title`)}</CardTitle>
+        <CardDescription>{t(`${mode}.description`)}</CardDescription>
       </CardHeader>
       <form action={formAction}>
         <CardContent className="flex flex-col gap-4">
           {mode === "signup" && (
             <div className="flex flex-col gap-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">{t("name")}</Label>
               <Input id="name" name="name" autoComplete="name" required />
-              <FieldError messages={fieldErrors?.name} />
+              <FieldError codes={fieldErrors?.name} />
             </div>
           )}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t("email")}</Label>
             <Input
               id="email"
               name="email"
@@ -74,10 +64,10 @@ export function AuthForm({ mode }: AuthFormProps) {
               autoComplete="email"
               required
             />
-            <FieldError messages={fieldErrors?.email} />
+            <FieldError codes={fieldErrors?.email} />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t("password")}</Label>
             <Input
               id="password"
               name="password"
@@ -85,22 +75,25 @@ export function AuthForm({ mode }: AuthFormProps) {
               autoComplete={mode === "signup" ? "new-password" : "current-password"}
               required
             />
-            <FieldError messages={fieldErrors?.password} />
+            <FieldError codes={fieldErrors?.password} />
           </div>
-          {formError && (
+          {formErrorCode && (
             <p role="alert" className="text-sm text-destructive">
-              {formError}
+              {tErrors(formErrorCode)}
             </p>
           )}
         </CardContent>
         <CardFooter className="mt-6 flex flex-col gap-3">
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? text.pending : text.submit}
+            {isPending ? t(`${mode}.pending`) : t(`${mode}.submit`)}
           </Button>
           <p className="text-sm text-muted-foreground">
-            {text.altText}{" "}
-            <Link href={text.altHref} className="underline underline-offset-4">
-              {text.altLabel}
+            {t(`${mode}.altText`)}{" "}
+            <Link
+              href={mode === "login" ? "/signup" : "/login"}
+              className="underline underline-offset-4"
+            >
+              {t(`${mode}.altLabel`)}
             </Link>
           </p>
         </CardFooter>

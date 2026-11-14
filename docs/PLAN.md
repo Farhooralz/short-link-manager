@@ -37,6 +37,8 @@ with something runnable and a commit.
 16. The locale is passed explicitly: pages read it from params and call setRequestLocale();
     auth actions receive it as a bound argument and validate it with resolveLocale().
     Dates are formatted through next-intl.
+17. Link URLs must start with http:// or https://, have a dotted hostname and no credentials
+    (so localhost is rejected on purpose). The redirect route re-validates stored URLs.
 
 ## Schema
 links:  id (uuid pk), user_id (text, from Neon Auth), slug (text UNIQUE), url (text),

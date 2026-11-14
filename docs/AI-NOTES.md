@@ -40,3 +40,10 @@
 - Phase 1: the same stale-cookie bug probably exists in v1 (`main`), where public pages also
   called `getSession()` without the middleware covering them.
 - Phase 2: [add anything that tripped you up here. If nothing did, skip this line.]
+- Phase 2: my URL validator trusted `new URL()`, which accepts `http:foo` and `http:/foo`
+  (browsers auto-complete the missing slashes). I only found out by typing garbage into the form.
+  Fix: require `https?://`, a dotted host, and no credentials; the redirect route re-checks the
+  stored URL.
+- Phase 2: Neon Auth timeouts (likely a cold start of the free-tier database, or a network
+  change) were shown as "Invalid email or password". Added a separate `serviceUnavailable` error
+  for `NETWORK_*` codes.

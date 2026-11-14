@@ -29,9 +29,9 @@ export function LinksTable({ links }: { links: LinkWithClicks[] }) {
               <TableHead>{t("slug")}</TableHead>
               <TableHead>{t("title")}</TableHead>
               <TableHead>{t("destination")}</TableHead>
-              <TableHead className="text-right">{t("clicks")}</TableHead>
+              <TableHead className="text-end">{t("clicks")}</TableHead>
               <TableHead>{t("created")}</TableHead>
-              <TableHead className="text-right">{t("actions")}</TableHead>
+              <TableHead className="text-end">{t("actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -41,15 +41,22 @@ export function LinksTable({ links }: { links: LinkWithClicks[] }) {
                   <Link
                     href={`/dashboard/links/${link.id}`}
                     className="underline-offset-4 hover:underline"
+                    dir="ltr"
                   >
                     /r/{link.slug}
                   </Link>
                 </TableCell>
-                <TableCell>{link.title ?? t("noTitle")}</TableCell>
-                <TableCell className="max-w-xs truncate" title={link.url}>
+                <TableCell dir="auto">{link.title ?? t("noTitle")}</TableCell>
+                <TableCell
+                  className="max-w-xs truncate text-start"
+                  dir="ltr"
+                  title={link.url}
+                >
                   {link.url}
                 </TableCell>
-                <TableCell className="text-right">{link.clickCount}</TableCell>
+                <TableCell className="text-end">
+                  {format.number(link.clickCount)}
+                </TableCell>
                 <TableCell>{formatDate(link.createdAt)}</TableCell>
                 <TableCell>
                   <div className="flex justify-end gap-2">
@@ -72,14 +79,19 @@ export function LinksTable({ links }: { links: LinkWithClicks[] }) {
                   <Link
                     href={`/dashboard/links/${link.id}`}
                     className="font-mono font-medium underline-offset-4 hover:underline"
+                    dir="ltr"
                   >
                     /r/{link.slug}
                   </Link>
                   {link.title && (
-                    <p className="text-sm text-muted-foreground">{link.title}</p>
+                    <p className="text-sm text-muted-foreground" dir="auto">
+                      {link.title}
+                    </p>
                   )}
                 </div>
-                <p className="break-all text-sm">{link.url}</p>
+                <p className="break-all text-sm rtl:text-right" dir="ltr">
+                  {link.url}
+                </p>
                 <p className="text-sm text-muted-foreground">
                   {t("clickCount", { count: link.clickCount })} ·{" "}
                   {formatDate(link.createdAt)}

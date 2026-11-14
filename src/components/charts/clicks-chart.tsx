@@ -28,7 +28,7 @@ export function ClicksChart({ data }: { data: DailyClicks[] }) {
   }));
 
   return (
-    <div className="h-64 w-full">
+    <div className="h-64 w-full" dir="ltr">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
@@ -46,6 +46,7 @@ export function ClicksChart({ data }: { data: DailyClicks[] }) {
             tickLine={false}
             axisLine={false}
             tick={tickStyle}
+            tickFormatter={(value: number) => format.number(value)}
           />
           <Tooltip
             cursor={{ fill: "var(--muted)" }}
@@ -56,6 +57,7 @@ export function ClicksChart({ data }: { data: DailyClicks[] }) {
             }}
             labelStyle={{ color: "var(--popover-foreground)" }}
             itemStyle={{ color: "var(--popover-foreground)" }}
+            formatter={(value) => format.number(Number(value))}
           />
           <Bar
             dataKey="clicks"

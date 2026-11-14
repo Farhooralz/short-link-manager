@@ -47,3 +47,10 @@
 - Phase 2: Neon Auth timeouts (likely a cold start of the free-tier database, or a network
   change) were shown as "Invalid email or password". Added a separate `serviceUnavailable` error
   for `NETWORK_*` codes.
+- Phase 3: `globals.css` had `--font-sans: var(--font-sans)` (self-referencing), so Geist was
+  never applied. Found while adding Vazirmatn; fixed by naming the loaded font variable `--font-sans`.
+- Phase 3: the AI's first RTL audit regex matched `rounded-lg` as if it were a left-side class
+  and missed `has-data-[...]:pr-2` variants in shadcn's button. I had to run an improved scan.
+  Lesson: test an audit command against a known positive before trusting its "none".
+- Phase 3: next-themes prints a React 19 "script tag" warning in dev (known upstream issue,
+  library unmaintained). I verified it's dev-only and left it alone.

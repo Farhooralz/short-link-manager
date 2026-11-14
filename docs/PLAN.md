@@ -39,6 +39,14 @@ with something runnable and a commit.
     Dates are formatted through next-intl.
 17. Link URLs must start with http:// or https://, have a dotted hostname and no credentials
     (so localhost is rejected on purpose). The redirect route re-validates stored URLs.
+18. Farsi uses Intl's default `fa` formatting: Persian digits and the Jalali calendar, with UTC
+    day boundaries. RTL via dir on <html> + logical Tailwind classes (shadcn ui files were
+    patched: pr/pl -> pe/ps, text-left -> text-start). URLs, slugs and emails use dir="ltr";
+    user-typed text uses dir="auto"; charts stay LTR. Latin snippets inside Farsi messages are
+    wrapped in Unicode isolates (\u2066..\u2069).
+19. The /r/[slug] 404 page is chosen from the first Accept-Language entry (fa or en).
+20. next-themes logs a React 19 "script tag" warning in development. It's a known, harmless
+    library issue; production is unaffected.
 
 ## Schema
 links:  id (uuid pk), user_id (text, from Neon Auth), slug (text UNIQUE), url (text),
@@ -104,15 +112,16 @@ Structure changes: pages live under src/app/[locale]/; src/i18n/ (routing, reque
 redirect-to); messages/ (one JSON file per locale).
 
 ### Phases
-- [x] 1. i18n routing (next-intl, pages under [locale], locale-aware links and redirects)
-- [x] 2. i18n messages (typed keys, translated action errors and Zod messages)
+- [x] 1. i18n routing
+- [x] 2. i18n messages
 - [ ] 3. Farsi + RTL (fa.json, Vazirmatn, logical classes, switcher, Jalali dates)
-- [ ] 4. Design system + app shell (tokens, sidebar, motion)
-- [ ] 5. Dashboard overview (stats, trend, top links, 30-day chart)
-- [ ] 6. Richer analytics (device, browser, country, referrer; additive migration)
-- [ ] 7. QR codes (PNG/SVG download)
-- [ ] 8. Link controls (expiry, click limit, on/off; additive migration)
-- [ ] 9. Search, sort, filter + CSV export
+- [ ] 4. Design system + app shell
+- [ ] 5. Dashboard overview (stats, week-over-week trend, top links, rule-based insight cards, date range)
+- [ ] 6. Analytics (device/browser/country/referrer, bot filter, live click stream; additive migration)
+- [ ] 7. QR codes + edit destination URL ("dynamic QR")
+- [ ] 8. Link controls (expiry + fallback URL, click limit, on/off, password protection; additive migration)
+- [ ] 9. Organize (search, sort, filter, tags, UTM builder, CSV import + export; additive migration)
 - [ ] 10. Command palette (⌘K)
 - [ ] 11. Landing page (bilingual, SEO, hreflang, OG image)
-- [ ] 12. Hardening (audit, README update, preview deploy, merge decision)
+- [ ] 12. Hardening (self-link guard, audit, README, preview deploy, Vercel region, merge decision)
+- [ ] 13. (stretch) Smart routing: device/country rules and A/B split

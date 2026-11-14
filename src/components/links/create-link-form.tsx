@@ -62,6 +62,7 @@ export function CreateLinkForm() {
               name="url"
               type="url"
               placeholder={t("urlPlaceholder")}
+              dir="ltr"
               required
             />
             <FieldError codes={fieldErrors.url} />
@@ -69,12 +70,12 @@ export function CreateLinkForm() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <Label htmlFor="slug">{t("slug")}</Label>
-              <Input id="slug" name="slug" placeholder={t("slugPlaceholder")} />
+              <Input id="slug" name="slug" placeholder={t("slugPlaceholder")} dir="ltr" />
               <FieldError codes={fieldErrors.slug} />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="title">{t("linkTitle")}</Label>
-              <Input id="title" name="title" placeholder={t("titlePlaceholder")} />
+              <Input id="title" name="title" placeholder={t("titlePlaceholder")} dir="auto" />
               <FieldError codes={fieldErrors.title} />
             </div>
           </div>

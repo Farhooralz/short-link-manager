@@ -1,6 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { signOutAction } from "@/actions/auth";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { SiteControls } from "@/components/site-controls";
 import { Button } from "@/components/ui/button";
 import { resolveLocale } from "@/i18n/locale";
 import { redirectTo } from "@/i18n/redirect-to";
@@ -30,10 +30,10 @@ export default async function DashboardLayout({
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <span className="font-semibold">{tCommon("appName")}</span>
           <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-muted-foreground sm:inline">
+            <span className="hidden text-sm text-muted-foreground sm:inline" dir="ltr">
               {session.user.email}
             </span>
-            <ThemeToggle />
+            <SiteControls />
             <form action={signOutAction.bind(null, locale)}>
               <Button type="submit" variant="outline" size="sm">
                 {t("logOut")}

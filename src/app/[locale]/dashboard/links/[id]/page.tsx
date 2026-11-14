@@ -54,15 +54,23 @@ export default async function LinkDetailPage({
         href="/dashboard"
         className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "self-start")}
       >
+        <span aria-hidden className="inline-block rtl:-scale-x-100">
+          ←
+        </span>{" "}
         {t("back")}
       </Link>
 
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="truncate text-2xl font-semibold">
+          <h1 className="truncate text-2xl font-semibold" dir="auto">
             {link.title ?? `/r/${link.slug}`}
           </h1>
-          <p className="font-mono text-sm text-muted-foreground">/r/{link.slug}</p>
+          <p
+            className="font-mono text-sm text-muted-foreground rtl:text-right"
+            dir="ltr"
+          >
+            /r/{link.slug}
+          </p>
         </div>
         <CopyButton slug={link.slug} />
       </div>
@@ -76,6 +84,7 @@ export default async function LinkDetailPage({
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-4"
+              dir="ltr"
             >
               {link.url}
             </a>
@@ -87,7 +96,7 @@ export default async function LinkDetailPage({
         <Card>
           <CardHeader>
             <CardDescription>{t("totalClicks")}</CardDescription>
-            <CardTitle className="text-3xl">{link.clickCount}</CardTitle>
+            <CardTitle className="text-3xl">{format.number(link.clickCount)}</CardTitle>
           </CardHeader>
         </Card>
         <Card>

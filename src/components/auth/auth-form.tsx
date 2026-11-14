@@ -51,7 +51,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           {mode === "signup" && (
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">{t("name")}</Label>
-              <Input id="name" name="name" autoComplete="name" required />
+              <Input id="name" name="name" autoComplete="name" dir="auto" required />
               <FieldError codes={fieldErrors?.name} />
             </div>
           )}
@@ -62,6 +62,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               name="email"
               type="email"
               autoComplete="email"
+              dir="ltr"
               required
             />
             <FieldError codes={fieldErrors?.email} />
@@ -73,6 +74,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               name="password"
               type="password"
               autoComplete={mode === "signup" ? "new-password" : "current-password"}
+              dir="ltr"
               required
             />
             <FieldError codes={fieldErrors?.password} />

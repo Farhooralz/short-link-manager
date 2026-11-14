@@ -11,6 +11,9 @@
     "dark": "Dark",
     "light": "Light"
   },
+  "Locale": {
+    "switchLanguage": "Switch language"
+  },
   "Home": {
     "tagline": "Create short links, share them anywhere, and see how many people click.",
     "signUp": "Sign up",
@@ -81,7 +84,7 @@
     "description": "Create your first short link with the form above."
   },
   "LinkDetail": {
-    "back": "← Back to links",
+    "back": "Back to links",
     "destination": "Destination",
     "totalClicks": "Total clicks",
     "created": "Created",

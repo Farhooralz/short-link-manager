@@ -2,10 +2,17 @@ import { z } from "zod";
 
 const SLUG_PATTERN = /^[a-zA-Z0-9-]+$/;
 
-function isHttpUrl(value: string): boolean {
+export function isHttpUrl(value: string): boolean {
+  if (!/^https?:\/\/[^/\s]/i.test(value)) return false;
+
   try {
-    const { protocol } = new URL(value);
-    return protocol === "http:" || protocol === "https:";
+    const { hostname, username, password } = new URL(value);
+    return (
+      hostname.includes(".") &&
+      !hostname.endsWith(".") &&
+      username === "" &&
+      password === ""
+    );
   } catch {
     return false;
   }

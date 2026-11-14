@@ -2,7 +2,7 @@ import { after, NextResponse } from "next/server";
 import { recordClick } from "@/lib/db/clicks";
 import { getLinkBySlug } from "@/lib/db/links";
 import { linkNotFoundResponse } from "@/lib/link-not-found-response";
-import { slugParamSchema } from "@/lib/validation/link";
+import { isHttpUrl, slugParamSchema } from "@/lib/validation/link";
 
 export async function GET(
   _request: Request,
@@ -13,6 +13,7 @@ export async function GET(
 
   const link = await getLinkBySlug(parsed.data);
   if (!link) return linkNotFoundResponse();
+  if (!link || !isHttpUrl(link.url)) return linkNotFoundResponse();
 
   after(async () => {
     try {

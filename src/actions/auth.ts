@@ -7,6 +7,10 @@ import { fail, type ActionResult } from "@/lib/result";
 import { signInSchema, signUpSchema } from "@/lib/validation/auth";
 import { toFieldErrors } from "@/lib/validation/errors";
 
+function isNetworkError(code: string | undefined): boolean {
+  return code?.startsWith("NETWORK_") ?? false;
+}
+
 export async function signUpAction(
   locale: string,
   _prevState: ActionResult<null> | null,
@@ -20,7 +24,7 @@ export async function signUpAction(
   const { error } = await auth.signUp.email(parsed.data);
   if (error) {
     console.error("sign-up failed:", error);
-    return fail("signUpFailed");
+    return fail(isNetworkError(error.code) ? "serviceUnavailable" : "signUpFailed");
   }
 
   redirectTo("/dashboard", resolveLocale(locale));
@@ -39,7 +43,7 @@ export async function signInAction(
   const { error } = await auth.signIn.email(parsed.data);
   if (error) {
     console.error("sign-in failed:", error);
-    return fail("signInFailed");
+    return fail(isNetworkError(error.code) ? "serviceUnavailable" : "signInFailed");
   }
 
   redirectTo("/dashboard", resolveLocale(locale));

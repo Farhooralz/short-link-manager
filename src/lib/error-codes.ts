@@ -3,6 +3,7 @@ export const ERROR_CODES = [
   "invalidInput",
   "signUpFailed",
   "signInFailed",
+  "serviceUnavailable",
   "createFailed",
   "deleteFailed",
   "linkNotFound",

@@ -106,6 +106,7 @@
     "invalidInput": "Please fix the highlighted fields.",
     "signUpFailed": "We couldn’t create your account. That email may already be registered.",
     "signInFailed": "Invalid email or password.",
+    "serviceUnavailable": "We couldn’t reach the authentication service. Please try again in a moment.",
     "createFailed": "Something went wrong creating your link. Please try again.",
     "deleteFailed": "Something went wrong deleting your link. Please try again.",
     "linkNotFound": "That link doesn’t exist or was already deleted."
